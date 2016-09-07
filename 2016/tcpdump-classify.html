@@ -86,15 +86,24 @@
 
 
 
-<meta name="description" content="其实, 我是一只程序猿.">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Stenvien's Note">
-<meta property="og:url" content="http://whynotyes.me/index.html">
+<meta name="description" content="0. 序最近有个需求，想抓包分析下公司的苹果推送服务，与苹果APNs服务端的TCP连接丢包情况，作为记录写下此文。
+公司的推送服务使用的是开源的PyAPNs库，enhanced版本的TCP长连接。开多进程(两台机，每台机10个进程)，每个进程会建立一个TCP长连接。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用tcpdump抓包后按TCP连接对拆分数据">
+<meta property="og:url" content="http://whynotyes.me/2016/tcpdump-classify.html">
 <meta property="og:site_name" content="Stenvien's Note">
-<meta property="og:description" content="其实, 我是一只程序猿.">
+<meta property="og:description" content="0. 序最近有个需求，想抓包分析下公司的苹果推送服务，与苹果APNs服务端的TCP连接丢包情况，作为记录写下此文。
+公司的推送服务使用的是开源的PyAPNs库，enhanced版本的TCP长连接。开多进程(两台机，每台机10个进程)，每个进程会建立一个TCP长连接。">
+<meta property="og:image" content="http://7xstwm.com1.z0.glb.clouddn.com/2016-09-07-00%3A19%3A49.jpg?imageView2/0/q/75">
+<meta property="og:image" content="http://7xstwm.com1.z0.glb.clouddn.com/2016-09-07-01%3A00%3A38.jpg?imageView2/0/w/250">
+<meta property="og:image" content="http://7xstwm.com1.z0.glb.clouddn.com/2016-09-07-01%3A01%3A24.jpg?imageView2/0/q/75">
+<meta property="og:image" content="http://7xstwm.com1.z0.glb.clouddn.com/2016-09-07-01%3A08%3A37.jpg?imageView2/0/q/75">
+<meta property="og:updated_time" content="2016-09-07T15:34:54.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Stenvien's Note">
-<meta name="twitter:description" content="其实, 我是一只程序猿.">
+<meta name="twitter:title" content="使用tcpdump抓包后按TCP连接对拆分数据">
+<meta name="twitter:description" content="0. 序最近有个需求，想抓包分析下公司的苹果推送服务，与苹果APNs服务端的TCP连接丢包情况，作为记录写下此文。
+公司的推送服务使用的是开源的PyAPNs库，enhanced版本的TCP长连接。开多进程(两台机，每台机10个进程)，每个进程会建立一个TCP长连接。">
+<meta name="twitter:image" content="http://7xstwm.com1.z0.glb.clouddn.com/2016-09-07-00%3A19%3A49.jpg?imageView2/0/q/75">
 
 
 
@@ -115,9 +124,9 @@
 
 
 
-  <link rel="canonical" href="http://whynotyes.me/"/>
+  <link rel="canonical" href="http://whynotyes.me/2016/tcpdump-classify.html"/>
 
-  <title> Stenvien's Note </title>
+  <title> 使用tcpdump抓包后按TCP连接对拆分数据 | Stenvien's Note </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -148,9 +157,7 @@
     
   
 
-  <div class="container one-collumn sidebar-position-left 
-   page-home 
- ">
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -237,9 +244,9 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
-  <section id="posts" class="posts-expand">
+
+  <div id="posts" class="posts-expand">
     
-      
 
   
   
@@ -259,10 +266,7 @@
             
             
               
-                
-                <a class="post-title-link" href="/2016/tcpdump-classify.html" itemprop="url">
-                  使用tcpdump抓包后按TCP连接对拆分数据
-                </a>
+                使用tcpdump抓包后按TCP连接对拆分数据
               
             
           </h1>
@@ -328,23 +332,47 @@
       
 
       
-        
-          <h4 id="0-序"><a href="#0-序" class="headerlink" title="0. 序"></a>0. 序</h4><p>最近有个需求，想抓包分析下公司的苹果推送服务，与苹果APNs服务端的TCP连接丢包情况，作为记录写下此文。</p>
-<p>公司的推送服务使用的是开源的<a href="https://github.com/djacobs/PyAPNs">PyAPNs</a>库，enhanced版本的TCP长连接。开多进程(两台机，每台机10个进程)，每个进程会建立一个TCP长连接。</p>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2016/tcpdump-classify.html#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
+        <h4 id="0-序"><a href="#0-序" class="headerlink" title="0. 序"></a>0. 序</h4><p>最近有个需求，想抓包分析下公司的苹果推送服务，与苹果APNs服务端的TCP连接丢包情况，作为记录写下此文。</p>
+<p>公司的推送服务使用的是开源的<a href="https://github.com/djacobs/PyAPNs" target="_blank" rel="external">PyAPNs</a>库，enhanced版本的TCP长连接。开多进程(两台机，每台机10个进程)，每个进程会建立一个TCP长连接。</p>
+<a id="more"></a>
+<h4 id="1-tcpdump抓包"><a href="#1-tcpdump抓包" class="headerlink" title="1. tcpdump抓包"></a>1. tcpdump抓包</h4><ul>
+<li>tcpdump tcp port 2195 -w tcp2195.log</li>
+</ul>
+<p>通过执行以上命令，抓取了推送高峰期(19:00 ~ 21:00)，该机器与苹果Apns服务端（<a href="https://feedback.push.apple.com:2195" target="_blank" rel="external">https://feedback.push.apple.com:2195</a>）的TCP数据包</p>
+<h4 id="2-将步骤1抓取到的数据文件，解析为文本文件"><a href="#2-将步骤1抓取到的数据文件，解析为文本文件" class="headerlink" title="2. 将步骤1抓取到的数据文件，解析为文本文件"></a>2. 将步骤1抓取到的数据文件，解析为文本文件</h4><ul>
+<li>tcpdump -r tcp2195.log &gt; tcp2195.log.txt</li>
+</ul>
+<p><code>tcp2195.log.txt</code>文件行的格式如下图所示：</p>
+<p><img src="http://7xstwm.com1.z0.glb.clouddn.com/2016-09-07-00%3A19%3A49.jpg?imageView2/0/q/75" alt=""></p>
+<p>由于抓包抓取的是TCP 2195端口，而上面说了，每个进程会与APNs建立一个长连接（域名feedback.push.apple.com每次的DNS解析结果不完全一样），而且APNs服务端会主动断开TCP连接（如当token非法时，此时进程会重建TCP连接），故抓取到的TCP包数据，里面会有多对TCP连接的数据，且相互交错。相互交错的TCP包交互数据较乱，比较难分析，为此，需要将文件<code>tcp2195.log.txt</code>里的数据，按照TCP连接对分离开来，再进行分析。</p>
+<h4 id="3-获取所有TCP连接对"><a href="#3-获取所有TCP连接对" class="headerlink" title="3. 获取所有TCP连接对"></a>3. 获取所有TCP连接对</h4><ul>
+<li>cat tcp2195.log.txt | awk ‘{print $3,$5}’ | awk -F”:” ‘{print $1}’ | sort -u &gt; peer_2195.log</li>
+</ul>
+<p><code>peer_2195.log</code>文件行的格式如下图所示：</p>
+<p><img src="http://7xstwm.com1.z0.glb.clouddn.com/2016-09-07-01%3A00%3A38.jpg?imageView2/0/w/250" alt=""></p>
+<p>由于抓取的是TCP 2195端口的数据包，可能会包括<code>本机:2195</code>的TCP连接对，需手工将这样的连接对删除，保存后<code>wc -l</code>看下还剩多少行（458行）。由于经过<code>sort -u</code>后已经是有序了，取后面一半即是我们需要关注的：<code>本机:random_port &lt;--&gt; apns:2195</code>的所有TCP连接</p>
+<h4 id="4-按TCP连接对拆分数据"><a href="#4-按TCP连接对拆分数据" class="headerlink" title="4. 按TCP连接对拆分数据"></a>4. 按TCP连接对拆分数据</h4><ul>
+<li>mkdir logs</li>
+<li>tail -n -229 peer_2195.log | awk ‘{print $1}’ | xargs -I@ bash -c “grep @ tcp2195.log.txt &gt; logs/@.log”</li>
+</ul>
+<p><img src="http://7xstwm.com1.z0.glb.clouddn.com/2016-09-07-01%3A01%3A24.jpg?imageView2/0/q/75" alt=""></p>
+<h4 id="5-分析TCP连接交互数据流"><a href="#5-分析TCP连接交互数据流" class="headerlink" title="5. 分析TCP连接交互数据流"></a>5. 分析TCP连接交互数据流</h4><p><img src="http://7xstwm.com1.z0.glb.clouddn.com/2016-09-07-01%3A08%3A37.jpg?imageView2/0/q/75" alt=""></p>
+<p>至此，就可以根据上面的文件去分析每个TCP连接的具体数据流交互情况，此部分就不详述了，可以查阅《TCP详解 - 卷1》</p>
+
       
     </div>
 
     <div>
       
+        
+
+      
     </div>
 
     <div>
+      
+        
+
       
     </div>
 
@@ -355,16 +383,15 @@
 
       
       
-        <div class="post-eof"></div>
-      
     </footer>
   </article>
 
 
-    
-  </section>
 
-  
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -372,6 +399,14 @@
 
 
           
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/tcpdump-classify.html"
+           data-title="使用tcpdump抓包后按TCP连接对拆分数据" data-url="http://whynotyes.me/2016/tcpdump-classify.html">
+      </div>
+    
+  </div>
+
 
         </div>
         
@@ -391,8 +426,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel  sidebar-panel-active ">
+      <section class="site-overview sidebar-panel ">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="http://7xstwm.com2.z0.glb.clouddn.com/icon.jpg"
@@ -453,6 +497,17 @@
 
       </section>
 
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#0-序"><span class="nav-text">0. 序</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-tcpdump抓包"><span class="nav-text">1. tcpdump抓包</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-将步骤1抓取到的数据文件，解析为文本文件"><span class="nav-text">2. 将步骤1抓取到的数据文件，解析为文本文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-获取所有TCP连接对"><span class="nav-text">3. 获取所有TCP连接对</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-按TCP连接对拆分数据"><span class="nav-text">4. 按TCP连接对拆分数据</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-分析TCP连接交互数据流"><span class="nav-text">5. 分析TCP连接交互数据流</span></a></li></ol></div>
+            
+          </div>
+        </section>
       
 
     </div>
@@ -556,6 +611,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
 
   
 
